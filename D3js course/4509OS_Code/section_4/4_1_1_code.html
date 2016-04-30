@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="description" content="Drawing Shapes W/ D3 -"/>
+  <meta charset="utf-8">
+  <title>CSV and D3</title>
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  
+  <style type="text/css">
+  </style>
+
+  </head>
+  <body>
+
+      <script>
+          var width = 400;
+          var height = 400;
+          var padding = 2;
+          var Data;
+  
+  
+
+  d3.text("http:localhost/data.csv", "text/csv", function (unParsedData){
+      
+      Data = d3.csv.parse(unParsedData);
+      
+      //just verifying the below data
+        
+        function logCountries(element, index, array){
+            console.log(array[index].country);
+          }
+        console.log("The countries are: \n");
+        Data.forEach(logCountries);
+      })
+
+
+
+
+
+      </script>
+
+
+  </body>
+
+  </html>

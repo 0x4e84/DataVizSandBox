@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="description" content="Drawing Shapes W/ D3 -"/>
+  <meta charset="utf-8">
+  <title>Building a Map with GEOJSON</title>
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <script src="http://d3js.org/topojson.v1.min.js"></script>
+  
+  <style type="text/css">
+  </style>
+
+  </head>
+  <body>
+
+      <script>
+      var width = 1000;
+      var height = 1000;
+      var Data;
+      d3.json("http:localhost/united_kingdom.json", function(error, uk) {
+            if (error) return console.error(error);
+            console.log(uk);
+            
+
+
+            //establish svg
+        var svg = d3.select("body").append("svg")
+          .attr("width", width)
+          .attr("height", height);
+
+          //accessing the subunits in a variable to present as the datum for paths to be appended
+        var subunits = topojson.feature(uk, uk.objects.subunits);
+          //establish what projection we're going to use to map the UK on to
+          
+        var projection = d3.geo.conicConformal()
+          .center([0,55.4])
+          .rotate([4.4, 0])
+          .parallels([50, 60])
+          .scale(6000)
+          .translate([width/2, height/ 2]);
+         //generating out path
+         var path = d3.geo.path()
+          .projection(projection);
+          //appending our path
+          svg.append("path")
+              .datum(subunits)
+              .attr("d", path);
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      });
+
+
+
+      </script>
+  </body>
+</html>

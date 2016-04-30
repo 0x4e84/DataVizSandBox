@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="description" content="Drawing Shapes W/ D3 -"/>
+  <meta charset="utf-8">
+  <title>Resizing Visualizations in D3</title>
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <script src="http://d3js.org/topojson.v1.min.js"></script>
+  
+  <style type="text/css">
+
+
+  .subunit.SCT { fill:gold; }
+  .subunit.NIR { fill: #3162B2; }
+  .subunit.ENG { fill: #5F9CFF; }
+  .subunit.IRL { fill: #46B24A; }
+  /*.subuni*/
+
+  .subunit-boundary {
+  fill: none;
+  stroke: #777;
+  stroke-dasharray: 2,2;
+  stroke-linejoin: round;
+}
+  /*.place-label{
+    font-size:12px;
+
+  }
+
+.subunit-boundary.IRL {
+  stroke: #aaa;
+}*/
+  </style>
+
+  </head>
+  <body>
+
+      <script>
+      var width = 1200;
+      var height = 1000;
+      var Data;
+      d3.json("http:localhost/united_kingdom.json", function(error, uk) {
+            if (error) return console.error(error);
+            console.log(uk);
+            
+
+
+            //establish svg
+        var svg = d3.select("body").append("svg")
+          .attr("width", width)
+          .attr("height", height);
+
+          //accessing the subunits in a variable to present as the datum for paths to be appended
+        var subunits = topojson.feature(uk, uk.objects.subunits);
+          //establish what projection we're going to use to map the UK on to
+          
+        var projection = d3.geo.albersUsa()
+          .center([0,55.4])
+          .rotate([4.4, 0])
+          .parallels([50, 60])
+          .scale(4000)
+          .translate([width/2, height/ 2]);
+         //generating out path
+         var path = d3.geo.path()
+          .projection(projection);
+          //appending our path
+          svg.append("path")
+              .datum(subunits)
+              .attr("d", path);
+      
+      svg.selectAll(".subunit")
+          .data(topojson.feature(uk, uk.objects.subunits).features)
+          .enter().append("path")
+          .attr("class", function(d) { return "subunit " + d.id; })
+          .attr("d", path);
+
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      });
+
+
+
+      </script>
+  </body>
+</html>

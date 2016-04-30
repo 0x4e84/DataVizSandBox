@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="description" content="Drawing Shapes W/ D3 -"/>
+  <meta charset="utf-8">
+  <title>Rendering a Basemap</title>
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <script src="http://d3js.org/topojson.v1.min.js"></script>
+  
+  <style type="text/css">
+  
+
+  </style>
+</head>
+  <body>
+  <script>
+      var width = 1200;
+      var height = 1000;
+    
+     var Data;
+
+//establish svg
+        var svg = d3.select("body").append("svg")
+          .attr("width", width)
+          .attr("height", height);
+
+        var path = d3.geo.path();
+       
+
+d3.json("http:localhost/county4.json", function(error, counties) {
+            if (error) return console.error(error);
+            console.log(counties);
+            Data = counties;
+
+
+            svg.selectAll("path")
+              .data(counties.features)
+              .enter()
+              .append("path")
+              .attr("d", path)
+              .attr("fill", "#666666")
+              .attr("class", "counties");
+           /* svg.selectAll("text")
+              .data(counties.features)
+              .enter()
+              .append("text")
+              .attr("class", "names")
+              .attr("transform", function (d){return "translate(" + path.centroid(d) +")";})
+              .attr("opacity", "0")
+              .attr("font-size", ".35em")
+              .text(function(d){return d.properties.NAME;});*/
+
+           
+              
+              
+
+              svg.selectAll(".counties").on("mouseover", function(d,i){
+                    d3.select(this).attr("fill", "red");
+                    
+                   /* console.log(d3.select(this).attr(name));*/
+                    
+                  
+                     })
+
+
+              .on("mouseout", function(d,i){
+                  d3.select(this).transition().duration(500).attr("fill", "#666666");
+                    
+
+
+
+
+
+
+              });
+              
+
+
+});
+
+
+  </script>
+  </body>
+  </html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+		<meta name="description" content="D3 works? Test"/>
+		<meta charset="utf-8">
+		<title>Testing D3 Boiler</title>
+		<style type="text/css">
+		rect:hover{
+			fill:yellow;
+
+		}
+		</style>
+	</head>
+
+	<body>
+		<script type="text/javascript">
+		 var dataset = [5, 10, 14, 20, 25, 11,24, 22, 18, 22, 9];
+		 var w = 300;
+         var h = 150;
+         var padding = 2;
+
+         var svg=d3.select("body")
+		 	.append("svg")
+         	.attr("width", w)
+         	.attr("height", h);
+
+         svg.selectAll("rect")
+         	.data(dataset)
+           	.enter()
+           	.append("rect")
+           	.attr({
+			    x: function(d,i){return i*(w/dataset.length);},
+			    y: function (d){return h-(d*4);},
+			    width: w / dataset.length-padding,
+			    height: function(d) {return d*4;},
+			    fill: function(d){if (d>10) {
+					return "red";
+					}
+				else {
+					return "teal";
+				};}
+			   });
+		</script>
+	</body>
+	</html>

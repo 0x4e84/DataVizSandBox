@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="description" content="Drawing Shapes W/ D3 -"/>
+  <meta charset="utf-8">
+  <title>CSV and D3</title>
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  
+  <style type="text/css">
+  </style>
+
+  </head>
+  <body>
+
+      <script>
+
+          var width = 400;
+          var height = 400;
+          var padding = 2;
+          var Data;
+          var GDPcaps=[];
+          var populations=[];
+
+window.onload = function() {
+
+
+d3.text("http:localhost/data.csv", "text/csv", function (unParsedData){
+    Data = d3.csv.parse(unParsedData);
+
+ //just verifying the below data
+
+  function logCountries(element, index, array){
+    console.log(array[index].country);
+  }
+  console.log("The countries are: \n");
+  Data.forEach(logCountries);
+
+
+//we do the following so as not to have to place prolonged accessor functions in the scale domains
+  function GDPCapGrabber(element, index, array){
+  
+      GDPcaps.push(+array[index].GDPcap);
+     }
+
+  
+  function populationGrabber(element, index, array){
+  
+    populations.push(+array[index].population);
+    }
+ 
+ Data.forEach(GDPCapGrabber);
+ Data.forEach(populationGrabber);
+
+//you'll want to call your visualization functions here, as this is when the data is ready
+
+
+
+
+//append svg
+var svg = d3.select("body").append("svg")
+  .attr({ width: width, height: height});
+  
+
+var scale = d3.scale.linear();
+//set input domain
+scale.domain([3, 110]);
+//set output range
+scale.range([10, 350]);
+
+
+var yScale = d3.scale.linear()
+    .domain([0, d3.max(populations)])
+    .range([(height-20), 10]);
+var xScale = d3.scale.linear()
+  .domain([0, d3.max(GDPcaps)])
+    .range([30, (width-7)]);
+
+
+var circleMaker = svg.selectAll("circle")
+  .data(Data)
+  .enter()
+  .append("circle");
+var circleAttributes = circleMaker.attr({
+  cx: function(d){return xScale(d.GDPcap);},
+  cy: function (d){return yScale(d.population);},
+  r: 5,
+  fill: "black"
+})
+
+
+
+ } //end of the d3.text function
+
+
+
+
+
+
+)}; //end of the windows onload function
+
+
+
+
+
+
+
+
+
+      </script>
+
+  </body>
+
+
+  </html>

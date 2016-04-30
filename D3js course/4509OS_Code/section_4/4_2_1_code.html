@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="description" content="Drawing Shapes W/ D3 -"/>
+  <meta charset="utf-8">
+  <title>JSON and D3</title>
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  
+  <style type="text/css">
+  </style>
+
+  </head>
+  <body>
+
+      <script>
+
+
+
+var height = 300;
+var width = 400;
+var padding = 2;
+var Data;
+
+d3.json("http:localhost/data.json",  function (JSON){
+    //logs results and places the JSON in a variable
+    Data = JSON.colorsArray;
+    console.log(Data);
+
+
+    //the main data in our JSON are color values, so let's generate random numbers to be the values for our bar chart, to be colored by JSON values
+   
+  
+    for (var i=0; i<Data.length; i++){
+    Data[i]["num"] = Math.floor(Math.random() * 100);
+    }
+
+
+
+  
+    var svg = d3.select("body").append("svg").attr({"height": height, "width": width});
+    var barMaker = svg.selectAll("rect")
+      .data(Data)
+      .enter()
+      .append("rect");
+    var barAttributes = barMaker.attr({
+        x: function(d,i){return i*(width/Data.length);},
+        y: function (d,i){return height-(Data[i].num*3);},
+        width: width / Data.length-padding,
+        height: function(d, i) {return Data[i].num*3;},
+        fill: function(d,i){return Data[i].colorName;}
+
+
+
+    });
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </script>
+
+
+
+  </body>
+
+</html>

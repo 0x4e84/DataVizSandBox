@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="description" content="Drawing Shapes W/ D3 -"/>
+  <meta charset="utf-8">
+  <title>Creating a Simple Scatterplot</title>
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+
+
+  <style>
+    div.tooltip {   
+      position: absolute;           
+      text-align: center;           
+      width: 100px;                  
+      height: 28px;                 
+      padding: 2px;             
+      font: 12px sans-serif;
+      background: #008AB8;           
+      border: 0px;      
+      border-radius: 6px;           
+      pointer-events: none;         
+    }
+
+
+
+
+  </style>
+  </head>
+<body>
+  <script type="text/javascript">
+    
+    var h= 350;
+    var w = 400;
+
+winPercentageByMonth = [
+     {"month":1, "winPercentage":20},
+     {"month":2, "winPercentage":90},
+     {"month":3, "winPercentage":20},
+     {"month":4, "winPercentage":51},
+     {"month":5, "winPercentage":15},
+     {"month":6, "winPercentage":22},
+     {"month":7, "winPercentage":9},
+     {"month":8, "winPercentage":6},
+     {"month":9, "winPercentage":23},
+     {"month":10, "winPercentage":7},
+     {"month":11, "winPercentage": 40},
+     {"month":12, "winPercentage": 45},
+     {"month":13, "winPercentage":20},
+     {"month":14, "winPercentage":14},
+     {"month":15, "winPercentage":3},
+     {"month":16, "winPercentage":21},
+     {"month":17, "winPercentage":15},
+     {"month":18, "winPercentage":69},
+     {"month":19, "winPercentage":9},
+     {"month":20, "winPercentage":6},
+     {"month":20, "winPercentage":110},
+     {"month":21, "winPercentage":7},
+     {"month":22, "winPercentage": 40},
+     {"month":23, "winPercentage": 45},
+     {"month":24, "winPercentage": 45}
+
+];
+
+
+//create svg
+var svg = d3.select("body").append("svg").attr({ width: w, height: h});
+//create placeholder circles
+var circleMaker = svg.selectAll("circle")
+  .data(winPercentageByMonth)
+  .enter()
+  .append("circle");
+//give circles attributes
+var circleAttributes = circleMaker.attr({
+  cx: function(d){return d.month*15;},
+  cy: function(d){return h-(d.winPercentage);},
+  r: function(d) {
+    return Math.sqrt(d.winPercentage);},
+  "z-index":".2",
+  fill:function(d){
+    if (d.winPercentage >10 & d.month > 5){
+      return "#B82E00";
+    }
+    else{
+      return "#B88A00";
+    };
+  }
+
+})
+ .on("mouseover", function(d) {      
+            div.transition()        
+                .duration(200)      
+                .style("opacity", .9);      
+            div .html("<strong>Win Percentage: </strong>" + d.winPercentage)  
+                .style("left", (d3.event.pageX) + "px")     
+                .style("top", (d3.event.pageY - 28) + "px");    
+            })                  
+  .on("mouseout", function(d) {       
+            div.transition()        
+                .duration(500)      
+                .style("opacity", 0);   
+           });
+
+
+//append text elements
+/*var textMaker = svg.selectAll("text")
+  .data(winPercentageByMonth)
+  .enter()
+  .append("text");
+
+//give text attributes
+  var textAttributes = textMaker
+  .attr("x", function(d){return d.month * 15;})
+  .attr("y", function(d){return h-d.winPercentage;})
+  .text(function(d){if(d.winPercentage >=60){return d.winPercentage;}})
+  .attr("font-family", "sans-serif")
+  .attr("font-size", "12px")
+  //added in second stage of 2.1
+  .attr("z-index",".1")
+  .attr("fill", "black");
+*/
+
+//append the tooltip divs
+var div = d3.select("body").append("div")   
+    .attr("class", "tooltip")               
+    .style("opacity", 0);
+
+
+</script>
+
+</body>
+
+
+</html>

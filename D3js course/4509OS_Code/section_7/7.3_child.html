@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="description" content="Drawing Shapes W/ D3 -"/>
+  <meta charset="utf-8">
+  <title>Using Pym.JS</title>
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <script type="text/javascript" src="pym.js"></script>
+
+  <style>
+    div.tooltip {   
+      position: absolute;           
+      text-align: center;           
+      width: 100px;                  
+      height: 28px;                 
+      padding: 2px;             
+      font: 12px sans-serif;
+      background: #008AB8;           
+      border: 0px;      
+      border-radius: 6px;           
+      pointer-events: none;         
+    }
+    .axis path,
+    .axis line{
+      fill:none;
+      stroke: black;
+      shape-rendering: crispEdges;
+    }
+
+
+
+
+  </style>
+  </head>
+<body>
+
+  <script type="text/javascript">
+    
+    var h= 350;
+    var w = 400;
+    var axisPadding = 20;
+winPercentageByMonth = [
+     {"month":1, "winPercentage":20},
+     {"month":2, "winPercentage":90},
+     {"month":3, "winPercentage":20},
+     {"month":4, "winPercentage":51},
+     {"month":5, "winPercentage":15},
+     {"month":6, "winPercentage":22},
+     {"month":7, "winPercentage":9},
+     {"month":8, "winPercentage":6},
+     {"month":9, "winPercentage":23},
+     {"month":10, "winPercentage":7},
+     {"month":11, "winPercentage": 40},
+     {"month":12, "winPercentage": 45},
+     {"month":13, "winPercentage":20},
+     {"month":14, "winPercentage":14},
+     {"month":15, "winPercentage":3},
+     {"month":16, "winPercentage":21},
+     {"month":17, "winPercentage":15},
+     {"month":18, "winPercentage":69},
+     {"month":19, "winPercentage":9},
+     {"month":20, "winPercentage":6},
+     {"month":20, "winPercentage":110},
+     {"month":21, "winPercentage":7},
+     {"month":22, "winPercentage": 40},
+     {"month":23, "winPercentage": 45},
+     {"month":24, "winPercentage": 45}
+
+];
+
+//initialize scale
+var scale = d3.scale.linear();
+//set input domain
+scale.domain([3, 110]);
+//set output range
+scale.range([10, 350]);
+var yScale = d3.scale.linear()
+    .domain([0, d3.max(winPercentageByMonth, function(d){ return d.winPercentage; })])
+    .range([h-20, 10]);
+var xScale = d3.scale.linear()
+  .domain([0, d3.max(winPercentageByMonth, function(d){return d.month;})])
+  .range([30, w-7]);
+var rScale = d3.scale.linear()
+  .domain([0, d3.max(winPercentageByMonth, function(d){return d.winPercentage;})])
+  .range([2, 10]);
+
+//create svg
+var svg = d3.select("body").append("svg").attr({ width: w, height: h});
+//create placeholder circles
+var circleMaker = svg.selectAll("circle")
+  .data(winPercentageByMonth)
+  .enter()
+  .append("circle");
+//give circles attributes
+var circleAttributes = circleMaker.attr({
+  cx: function(d){return xScale(d.month);},
+  cy: function(d){return yScale(d.winPercentage);},
+  r: function(d) {
+    return Math.sqrt(d.winPercentage);},
+  "z-index":".2",
+  fill:function(d){
+    if (d.winPercentage >10 & d.month > 5){
+      return "#B82E00";
+    }
+    else{
+      return "#B88A00";
+    };
+  }
+
+})
+ .on("mouseover", function(d) {      
+            div.transition()        
+                .duration(200)      
+                .style("opacity", .9);      
+            div .html("<strong>Win Percentage: </strong>" + d.winPercentage)  
+                .style("left", (d3.event.pageX) + "px")     
+                .style("top", (d3.event.pageY - 28) + "px");    
+            })                  
+  .on("mouseout", function(d) {       
+            div.transition()        
+                .duration(500)      
+                .style("opacity", 0);   
+           });
+
+
+
+
+//append the tooltip divs
+var div = d3.select("body").append("div")   
+    .attr("class", "tooltip")               
+    .style("opacity", 0);
+
+
+//adding axis
+var xAxis = d3.svg.axis()
+  .scale(xScale);
+  //.ticks(3);
+//adding axis
+var yAxis = d3.svg.axis()
+  .scale(yScale)
+  .orient("left");
+
+
+
+//call the xAxis function
+svg.append("g")
+  .attr("class","axis")
+  //transforms take in (x,y) coordinates
+  .attr("transform","translate(0,"+ (h-axisPadding) + ")")
+  .call(xAxis);
+
+//call the y axis function
+svg.append("g")
+.attr("class","axis")
+.attr("transform", "translate("+ (axisPadding+10) + ",0)")
+.call(yAxis);
+
+//pym requirements-------------------------------------
+
+var pymChild = new pym.Child();
+</script>
+
+
+</body>
+
+
+</html>

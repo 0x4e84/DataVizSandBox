@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="description" content="Drawing Shapes W/ D3 -"/>
+  <meta charset="utf-8">
+  <title>Resizing Visualizations in D3</title>
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  
+  <style type="text/css">
+  body{
+    width:90%;
+    margin: 0 auto;
+    height:100%;
+  }
+  #chart{
+    width: 80%;
+    height: 50%;
+    margin: 0 auto;
+  }
+  .axis path,
+  .axis line{
+      fill:none;
+      stroke: black;
+      shape-rendering: crispEdges;
+    }
+  @media(max-width:400px){
+    
+    body{
+      width:100%;
+    }
+    #chart{
+      width:100%;
+    }
+  }
+  </style>
+
+  </head>
+<body>
+
+<div id="chart">
+</div>
+<script>
+
+var margin = {top: 10, right: 10, bottom: 10, left: 10},
+    width = parseInt(d3.select("#chart").style('width'), 10),
+    width = width - margin.left - margin.right,
+    //ratio doesn't always have to be perfect, just about the ratio between the height and width--so that it won't resize based on a height larger than the container
+    ratio = .3,
+    height = width * ratio;
+ 
+
+//basic rendering of scatterplot
+
+
+var winPercentageByMonth = [
+     {"month":1, "winPercentage":20},
+     {"month":2, "winPercentage":90},
+     {"month":3, "winPercentage":20},
+     {"month":4, "winPercentage":51},
+     {"month":5, "winPercentage":15},
+     {"month":6, "winPercentage":22},
+     {"month":7, "winPercentage":9},
+     {"month":8, "winPercentage":6},
+     {"month":9, "winPercentage":23},
+     {"month":10, "winPercentage":7},
+     {"month":11, "winPercentage": 40},
+     {"month":12, "winPercentage": 45},
+     {"month":13, "winPercentage":20},
+     {"month":14, "winPercentage":14},
+     {"month":15, "winPercentage":3},
+     {"month":16, "winPercentage":21},
+     {"month":17, "winPercentage":15},
+     {"month":18, "winPercentage":69},
+     {"month":19, "winPercentage":9},
+     {"month":20, "winPercentage":6},
+     {"month":20, "winPercentage":110},
+     {"month":21, "winPercentage":7},
+     {"month":22, "winPercentage": 40},
+     {"month":23, "winPercentage": 45},
+     {"month":24, "winPercentage": 45}
+
+];
+
+//initialize scale
+var scale = d3.scale.linear();
+//set input domain
+scale.domain([3, 110]);
+//set output range
+scale.range([10, 350]);
+var yScale = d3.scale.linear()
+    .domain([0, d3.max(winPercentageByMonth, function(d){ return d.winPercentage; })])
+    .range([height-20, 10]);
+var xScale = d3.scale.linear()
+  .domain([0, d3.max(winPercentageByMonth, function(d){return d.month;})])
+  .range([30, width-7]);
+var rScale = d3.scale.linear()
+  .domain([0, d3.max(winPercentageByMonth, function(d){return d.winPercentage;})])
+  .range([2, 10]);
+
+//create svg
+var svg = d3.select("#chart").append("svg").attr({ width: width, height: height});
+//create placeholder circles
+var circleMaker = svg.selectAll("circle")
+  .data(winPercentageByMonth)
+  .enter()
+  .append("circle");
+//give circles attributes
+var circleAttributes = circleMaker.attr({
+  cx: function(d){return xScale(d.month);},
+  cy: function(d){return yScale(d.winPercentage);},
+  r: function(d) {
+    return Math.sqrt(d.winPercentage);},
+  "z-index":".2",
+  fill:function(d){
+    if (d.winPercentage >10 & d.month > 5){
+      return "#B82E00";
+    }
+    else{
+      return "#B88A00";
+    };
+  }
+
+});
+
+
+  //adding axis
+var xAxis = d3.svg.axis()
+  .scale(xScale);
+  //.ticks(3);
+//adding axis
+if(width<500){
+var yAxis = d3.svg.axis()
+  .scale(yScale)
+  .orient("left")
+  .ticks(3);
+}
+else{
+var yAxis = d3.svg.axis()
+  .scale(yScale)
+  .orient("left")
+  .ticks(5);
+}
+
+
+
+//call the xAxis function
+svg.append("g")
+  .attr("class","axis")
+  //transforms take in (x,y) coordinates
+  .attr("transform","translate(0,"+ (height-margin.top-margin.bottom) + ")")
+  .call(xAxis);
+
+//call the y axis function
+svg.append("g")
+.attr("class","axis")
+.attr("transform", "translate("+ (10+margin.left+margin.right) + ",0)")
+.call(yAxis);
+
+
+
+//resize function
+
+function resize(){
+   d3.select('svg').remove();
+
+
+    width = parseInt(d3.select("#chart").style('width'), 10),
+    width = width - margin.left - margin.right,
+    //ratio doesn't always have to be perfect, just about the ratio between the height and width--so that it won't resize based on a height larger than the container
+    ratio = .3,
+    height = width * ratio;
+
+   
+
+//basic rendering of scatterplot
+
+//initialize scale
+var scale = d3.scale.linear();
+//set input domain
+scale.domain([3, 110]);
+//set output range
+scale.range([10, 350]);
+var yScale = d3.scale.linear()
+    .domain([0, d3.max(winPercentageByMonth, function(d){ return d.winPercentage; })])
+    .range([height-20, 10]);
+var xScale = d3.scale.linear()
+  .domain([0, d3.max(winPercentageByMonth, function(d){return d.month;})])
+  .range([30, width-7]);
+var rScale = d3.scale.linear()
+  .domain([0, d3.max(winPercentageByMonth, function(d){return d.winPercentage;})])
+  .range([2, 10]);
+
+//create svg
+var svg = d3.select("#chart").append("svg").attr({ width: width, height: height});
+//create placeholder circles
+var circleMaker = svg.selectAll("circle")
+  .data(winPercentageByMonth)
+  .enter()
+  .append("circle");
+//give circles attributes
+var circleAttributes = circleMaker.attr({
+  cx: function(d){return xScale(d.month);},
+  cy: function(d){return yScale(d.winPercentage);},
+  r: function(d) {
+    return Math.sqrt(d.winPercentage);},
+  "z-index":".2",
+  fill:function(d){
+    if (d.winPercentage >10 & d.month > 5){
+      return "#B82E00";
+    }
+    else{
+      return "#B88A00";
+    };
+  }
+
+});
+
+
+  //adding axis
+var xAxis = d3.svg.axis()
+  .scale(xScale);
+  //.ticks(3);
+//adding axis--ticks dependent on screen size
+if(width<500){
+var yAxis = d3.svg.axis()
+  .scale(yScale)
+  .orient("left")
+  .ticks(3);
+}
+else{
+var yAxis = d3.svg.axis()
+  .scale(yScale)
+  .orient("left")
+  .ticks(5);
+}
+
+
+
+
+
+//call the xAxis function
+svg.append("g")
+  .attr("class","axis")
+  //transforms take in (x,y) coordinates
+  .attr("transform","translate(0,"+ (height-margin.top-margin.bottom) + ")")
+  .call(xAxis);
+
+//call the y axis function
+svg.append("g")
+.attr("class","axis")
+.attr("transform", "translate("+ (10+margin.left+margin.right) + ",0)")
+.call(yAxis);
+
+}
+
+
+d3.select(window).on('resize', resize);
+
+
+</script>
+</body>
+
+</html>

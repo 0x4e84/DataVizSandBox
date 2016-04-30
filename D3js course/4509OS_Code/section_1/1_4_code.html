@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="description" content="Drawing Shapes W/ D3 -"/>
+  <meta charset="utf-8">
+  <title>Resizing Visualizations in D3</title>
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <script src="http://d3js.org/topojson.v1.min.js"></script>
+  
+  <style type="text/css">
+  
+
+  </style>
+</head> 
+  <body>
+  <script>
+var h = 300;
+var w = 400;
+
+winPercentageByMonth = [
+     {"month":1, "winPercentage":20},
+     {"month":2, "winPercentage":14},
+     {"month":3, "winPercentage":20},
+     {"month":4, "winPercentage":21},
+     {"month":5, "winPercentage":15},
+     {"month":6, "winPercentage":22},
+     {"month":7, "winPercentage":9},
+     {"month":8, "winPercentage":6},
+     {"month":9, "winPercentage":23},
+     {"month":10, "winPercentage":7},
+     {"month":11, "winPercentage": 40},
+     {"month":12, "winPercentage": 45}
+];
+var dataset_two = [
+     {"month":1, "winPercentage":14},
+     {"month":2, "winPercentage":19},
+     {"month":3, "winPercentage":24},
+     {"month":4, "winPercentage":24},
+     {"month":5, "winPercentage":24},
+     {"month":6, "winPercentage":27},
+     {"month":7, "winPercentage":32},
+     {"month":8, "winPercentage":38},
+     {"month":9, "winPercentage":11},
+     {"month":10, "winPercentage":25},
+     {"month":11, "winPercentage": 40},
+     {"month":12, "winPercentage": 45}
+
+
+
+];
+//takes values from our data above and turns into x and y attributes
+var line_one = d3.svg.line()
+  .x(function (d) { return d.month*33; })
+// in this case, we're not going to be using more than 12 months, and so we've simply divided 400 by 12, giving us 12 equal segments of our chart that are each 33px wide.
+  .y(function (d) { return h-(d.winPercentage*3); })
+  .interpolate("linear");
+var line_two = d3.svg.line()
+  .x(function (d) { return d.month*33; })
+  .y(function (d) { return h-(d.winPercentage*3); })
+  .interpolate("linear");
+
+var svg = d3.select("body").append("svg").attr({ width:w, height: h});
+
+var viz_one = svg.append("path")
+  .attr({
+    d: line_one(winPercentageByMonth),
+    "stroke": "blue",
+    "stroke-width": 2,
+    "fill": "none"
+});
+var viz_two = svg.append("path")
+  .attr({
+    d: line_two(dataset_two),
+    "stroke": "red",
+    "stroke-width": 2,
+    "fill": "none"
+});
+
+  </script>
+  <body></body>
+  </html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<html lang="en">
+  <head>
+      
+  <link rel="stylesheet" href="styles/styles.css"/>
+  <link rel="stylesheet" href="css/reset.css"/>
+    
+  <title>D3 Filters</title>
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    
+    <style>
+    *{
+      text-align:center;
+    }
+    h2{
+      cursor: default;
+    }
+    #winning, #losing{
+      width: 200px;
+      margin: 0 auto;
+    }
+     .selected{
+      background: black;
+      color:white;
+    }
+    .unselected{
+      background:white;
+      color:black;
+    } 
+    </style>
+    
+  
+</head>
+<body >
+
+  <div id="winning"><h2>Winning</h2></div>
+  vs.
+  <div id ="losing"><h2>Losing</h2></div>
+  
+<script type="text/javascript">
+
+var h = 300;
+var w = 400;
+
+winPercentageByMonth = [
+     {"month":1, "winPercentage":20},
+     {"month":2, "winPercentage":14},
+     {"month":3, "winPercentage":20},
+     {"month":4, "winPercentage":21},
+     {"month":5, "winPercentage":15},
+     {"month":6, "winPercentage":22},
+     {"month":7, "winPercentage":9},
+     {"month":8, "winPercentage":6},
+     {"month":9, "winPercentage":23},
+     {"month":10, "winPercentage":7},
+     {"month":11, "winPercentage": 40},
+     {"month":12, "winPercentage": 45}
+];
+
+
+
+
+
+//takes values from our data above and turns into x and y attributes
+var xAndyCalculator = d3.svg.line()
+  .x(function (d) { return d.month*33; })
+// in this case, we're not going to be using more than 12 months, and so we've simply divided 400 by 12, giving us 12 equal segments of our chart that are each 33px wide.
+  .y(function (d) { return h-(d.winPercentage*3); })
+  .interpolate("linear");
+
+var svg = d3.select("body").append("svg").attr({ width:w, height: h});
+
+var viz = svg.append("path")
+  .attr({
+    d: xAndyCalculator(winPercentageByMonth),
+    "stroke": "blue",
+    "stroke-width": 2,
+    "fill": "none"
+});
+
+ d3.selectAll("#losing").on("mouseover", function(d,i){
+//append losing month dots
+svg.selectAll("dot")
+  .data(winPercentageByMonth)
+  .enter().append("circle")
+  .filter(function(d){return d.winPercentage<20;})
+    .style("fill", "red")
+    .attr("r", 5)
+    .attr("class", "losingDots")
+    .attr("cx", function(d){return d.month*33;})
+    .attr("cy", function(d){return h-d.winPercentage*3;});
+
+     //invert text color
+  d3.select("#losing")
+    .attr("class","selected");
+
+})
+ .on("mouseout", function(d,i){
+    d3.selectAll(".losingDots").remove();
+//take away color invert
+d3.select("#losing")
+    .attr("class","unselected");
+
+ });
+
+ d3.selectAll("#winning").on("mouseover", function(d,i){
+//append winning month dots
+    svg.selectAll("dot")
+  .data(winPercentageByMonth)
+  .enter().append("circle")
+  .filter(function(d){return d.winPercentage>20;})
+    .style("fill", "yellow")
+    .attr("r", 5)
+    .attr("class", "winningDots")
+    .attr("cx", function(d){return d.month*33;})
+    .attr("cy", function(d){return h-d.winPercentage*3;});
+
+  //invert text color
+  d3.select("#winning")
+    .attr("class","selected");
+
+  })
+  .on("mouseout", function(d,i){
+    d3.selectAll(".winningDots").remove();
+//take away color invert
+d3.select("#winning")
+    .attr("class","unselected");
+
+  
+
+  });
+
+
+
+
+  </script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+
+
+
+</html>

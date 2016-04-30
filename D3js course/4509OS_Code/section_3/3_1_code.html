@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="description" content="Drawing Shapes W/ D3 -"/>
+    <meta charset="utf-8">
+    <title>Responsive Foundations: Laying the Mobile First Grid</title>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <style type="text/css">
+      body {
+        width: 90%;               /* set the width */
+        margin: 0 auto;             /* center the content */
+      }
+
+      .span-1, .span-2, .span-3, .span-4 {
+        min-height: 100px;
+        float: left;
+        margin-right: 3.333%;         /* all spans get margin-right */
+        margin-bottom: 10px;
+      }
+
+      .span-1 {
+        width: 21.6%;                /* subtract 40px from 1/4 * 300 for margin-right*/
+        background-color: #9FEE00;      
+      }
+
+      .span-2 {
+        width: 46.66%;               /* subtract 20px from 3/4 of 300 for margin-right*/
+        background-color: #FF0000;
+      }
+      
+      .span-3 {
+        width: 70%;               /* subtract 20px from 3/4 of 300 for margin-right*/
+        background-color: #CD0074;
+      }
+
+      .span-4{
+        width: 96.6%;               /*subtract 10px from 300 for margin-right*/
+        background-color: #00CC00;
+
+      }
+
+
+
+
+
+    </style>
+
+
+  </head>
+  <body>
+    <div class="span-4">
+      <p>Spanning four columns.</p>
+    </div>
+  
+    <div class="span-1">
+      <p>Spanning one column.</p>
+    </div>
+    
+    <div class="span-3">
+      <p>Spanning three columns.</p>
+    </div>
+
+    <div class="span-2">
+      <p>Spanning two columns</p>
+    </div> 
+
+    <div class="span-2">
+      <p>Spanning two columns</p>
+    </div>   
+
+    <div class="span-1">
+      <p>Spanning one column.</p>
+    </div>
+
+    <div class="span-1">
+      <p>Spanning one column.</p>
+    </div>
+
+    <div class="span-1">
+      <p>Spanning one column.</p>
+    </div>
+    <div class="span-1">
+      <p>Spanning one column.</p>
+    </div>
+
+     
+
+
+
+  </body>
+</html>

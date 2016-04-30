@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="description" content="Drawing Shapes W/ D3 -"/>
+  <meta charset="utf-8">
+  <title>Learning Bootstrap</title>
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+<style>
+  .col-md-1, .col-md-8, .col-md-4, .col-md-6, .col-sm-2 , .col-xs-3{
+    
+    border: 1px solid black;
+
+
+  }
+  #content{
+    background: #ECF0F1;
+  }
+  #sponsors{
+    background:#2980B9;
+    color:#E8E8E8 ;
+  }
+  .col-md-1, col-sm-2, col-xs-3{
+  background:#E74C3C ;
+  }
+  #footer{
+    background: #2C3E50;
+    color: #ECF0F1;
+  }
+</style>
+</head>
+<body>
+<div class="row">
+  <div class="col-md-1 col-sm-2 col-xs-3"><strong>LOGO</strong></div>
+  <div class="col-md-1 col-sm-2 col-xs-3">Space</div>
+  <div class="col-md-1 col-sm-2 col-xs-3">Space</div>
+  <div class="col-md-1 col-sm-2 col-xs-3">Space</div>
+  <div class="col-md-1 col-sm-2 col-xs-3">Space</div>
+  <div class="col-md-1 col-sm-2 col-xs-3">Space</div>
+  <div class="col-md-1 col-sm-2 col-xs-3">Space</div>
+  <div class="col-md-1 col-sm-2 col-xs-3">Space</div>
+  <div class="col-md-1 col-sm-2 col-xs-3">Space</div>
+  <div class="col-md-1 col-sm-2 col-xs-3">Space</div>
+  <div class="col-md-1 col-sm-2 col-xs-3">Space</div>
+  <div class="col-md-1 col-sm-2 col-xs-3"><strong>MENU</strong></div>
+</div>
+<div class="row">
+  <div class="col-md-8 col-sm-9" id="content"><h2>Article Title</h2>
+    <div id="chart">
+    </div>
+    <p>
+      Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"
+    </p>
+
+
+
+
+
+  </div>
+  <div class="col-md-4 col-sm-3" id="content"><h3>Previous Articles</h3>
+    <ul><li>Feature One</li>
+        <li>Feature Two</li>
+        <li>Feature Three</li>
+        <li>Feature Four</li>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-4 col-sm-4" id="sponsors">Special Thanks</div>
+  <div class="col-md-4 col-sm-4" id="sponsors">To These</div>
+  <div class="col-md-4 col-sm-4" id="sponsors">Sponsors</div>
+</div>
+<div class="row">
+  <div class="col-xs-6" id="footer">Footer</div>
+  <div class="col-xs-6" id="footer">Footer</div>
+</div>
+
+
+
+<script>
+
+
+var margin ={left:10, right:10, top:10, bottom: 10}
+  , width = parseInt(d3.select('#chart').style('width'))
+  , width = width - margin.left - margin.right
+  , mapRatio = .1
+  , height = width * mapRatio;
+
+var dataset =[9,11,14,19,17,16,17,34,22,19,54,12,9,40,88];
+
+//initialize scale
+var scale = d3.scale.linear();
+scale.domain([d3.min(dataset), d3.max(dataset)]);
+//set output range
+scale.range([2, 100]);
+
+
+var svg = d3.select("#chart").append("svg")
+      .attr("width", width)
+      .attr("height", height);
+
+svg.selectAll("rect")
+  .data(dataset)
+  .enter()
+  .append("rect")
+  .attr({
+    x: function(d,i){return i*(width/dataset.length);},
+    y: function (d){return height-(scale(d));},
+    width: width / dataset.length,
+    height: function(d) {return scale(d);},
+    fill: "black"
+  });
+
+  
+      //resize
+d3.select(window).on('resize', resize);
+
+
+function resize(){
+  
+    d3.select("svg").remove();
+   
+
+    width = parseInt(d3.select('#chart').style('width'))
+  , width = width - margin.left - margin.right
+  , mapRatio = .2
+  , height = width * mapRatio;
+
+  var svg = d3.select("#chart").append("svg")
+      .attr("width", width)
+      .attr("height", height);
+   svg.selectAll("rect")
+      .data(dataset)
+      .enter()
+      .append("rect")
+      .attr({
+        x: function(d,i){return i*(width/dataset.length);},
+        y: function (d){return height-(scale(d));},
+        width: width / dataset.length,
+        height: function(d) {return scale(d);},
+        fill: "black"
+  });
+   
+}
+
+
+
+
+</script>
+  </body>
+  </html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="description" content="Drawing Shapes W/ D3 -"/>
+  <meta charset="utf-8">
+  <title>Resizing Visualizations in D3</title>
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <script src="http://d3js.org/topojson.v1.min.js"></script>
+  
+  <style type="text/css">
+  rect{
+
+stroke-width: 1;
+  }
+  .legend{
+  font-size: 10px;
+
+
+  }
+ div.tooltip {   
+      position: absolute;           
+      text-align: center;           
+      width: 100px;                  
+      height: 28px;                 
+      padding: 2px;             
+      font: 12px sans-serif;
+      background: #008AB8;           
+      border: 0px;      
+      border-radius: 6px;           
+      pointer-events: none;         
+    }
+
+#map{
+  width:100%;
+  height:100%;
+}
+@media(max-width: 900px){
+  
+svg{
+  width:100%;
+  height:100%;
+}
+
+
+}
+
+  </style>
+  </head>
+  <body>
+  <script>
+
+var margin = {top: 10, left: 10, bottom: 10, right: 10}
+  , width = parseInt(d3.select('body').style('width'))
+  , width = width - margin.left - margin.right
+  , mapRatio = .5
+  , height = width * mapRatio;
+var Data;
+//establish path
+var projection = d3.geo.albersUsa()
+    .scale(width)
+    .translate([width / 2, height / 2]);
+var path = d3.geo.path()
+  .projection(projection);
+         
+        
+
+
+//establish svg
+var svg = d3.select("body").append("svg")
+  .attr("width", width)
+  .attr("height", height);
+
+
+
+
+
+
+//establish color scale
+var color = d3.scale.linear().domain([1,100])
+.range(['rgb(236,231,242)','rgb(166,189,219)','rgb(43,140,190)']);
+
+
+
+
+/*function resize() {
+    //remove previous chart
+     d3.select('svg').remove();
+
+  }*/
+
+
+
+//make JSON call
+d3.json("http:localhost/county4.json", function(error, counties) {
+  if (error) return console.error(error);
+    console.log(counties);
+    Data = counties;
+
+           
+    //generate chloropleth values      
+    function randomizer(d){
+              
+                
+      for (var i=0; i<d.features.length; i++){
+        var random = Math.floor(Math.random() * 100);
+         d.features[i].properties.chloropleth = random;
+
+
+
+      }
+
+
+
+    };
+    randomizer(counties);
+           
+           
+
+     
+    //append paths/render map
+    svg.selectAll("path")
+      .data(counties.features)
+      .enter()
+      .append("path")
+        .attr("d", path)
+          .attr("class", "counties")
+          .style("fill", function(d){
+            var chloropleth = d.properties.chloropleth;
+            if(chloropleth){
+              return color(chloropleth);
+                  
+            }
+            else{
+              return "#666666"
+            }
+
+
+          })
+
+          //activating tooltips
+          .on("mouseover", function(d) {      
+            div.transition()        
+                .duration(200)      
+                .style("opacity", .9);      
+            div .html("<strong>Chloropleth Value: </strong>" + d.properties.chloropleth)  
+                .style("left", (d3.event.pageX) + "px")     
+                .style("top", (d3.event.pageY - 28) + "px");    
+            })                  
+          .on("mouseout", function(d) {       
+            div.transition()        
+                .duration(500)      
+                .style("opacity", 0);   
+           });
+
+  //append tooltips
+  var div = d3.select("body").append("div")   
+    .attr("class", "tooltip")               
+    .style("opacity", 0);
+
+
+  //legend
+  var legendRectSize = 18;
+  var legendSpacing = 8;
+  var marginMaker = width/2;
+  var legend = svg.selectAll(".legend")
+      .data(color.domain())
+      .enter()
+      .append('g')
+        .attr("class", "legend")
+        .attr("transform", function (d, i){
+            
+          var horizontal = (legendRectSize * i) + legendSpacing+marginMaker;
+
+
+            return 'translate('+ horizontal + ','+ legendRectSize +')'
+          });
+  //append legend rects
+  legend.append('rect')
+  .attr('width', legendRectSize)
+  .attr('height', legendRectSize)
+  .style('fill', color)
+  .style('stroke', "black");
+
+
+  //append legend text
+  legend.append("text")
+    .attr('x', 4)
+    .attr('y', (legendRectSize*2) )
+    .text(function(d){return d;});
+
+
+
+  
+
+
+});
+      
+
+
+           
+
+     
+      //resize
+/*d3.select(window).on('resize', resize);         */
+
+
+
+
+
+
+
+  </script>
+  </body>
+  </html>

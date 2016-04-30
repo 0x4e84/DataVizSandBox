@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<html lang="en">
+  <head>
+      
+  <!-- <link rel="stylesheet" href="styles/styles.css"/>
+  <link rel="stylesheet" href="css/reset.css"/> -->
+    
+  <title>Pie Layout</title>
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    
+    <style>
+    *{
+      text-align:center;
+    }
+    </style>
+    
+  
+</head>
+<body>
+
+  <script type="text/javascript">
+
+var h = 600;
+var w = 600;
+var data = [4, 7, 9, 12, 34, 2, 20];
+var color = d3.scale.category20c();
+
+
+var outerRadius = w / 2;
+var innerRadius = 0;
+//what will draw the wedges
+var arc = d3.svg.arc()
+  .innerRadius(innerRadius)
+  .outerRadius(outerRadius);
+//create svg
+var svg = d3.select("body")
+  .append("svg")
+  .attr("width",w)
+  .attr("height", h);
+//what we'll pass data into to get into proper format
+var pie = d3.layout.pie();
+
+
+var arcs = svg.selectAll("g.arc")
+  .data(pie(data))
+  .enter()
+  .append("g")
+  .attr("class", "arc")
+  .attr("transform", "translate(" + outerRadius + ", "+outerRadius + ")");
+
+
+//draw the paths for our arcs
+arcs.append("path")
+  .attr("fill", function(d,i){
+      return color(i);
+    })
+  .attr("d", arc);
+
+  //add labels
+  arcs.append("text")
+    .attr("transform", function(d) {
+        return "translate(" + arc.centroid(d) + ")";
+    })
+    .attr("text-anchor", "middle")
+    .text(function(d) {
+        return d.value;
+    })
+    .style("fill", "white")
+    .style("font-size", "180%");
+var curAngle = 0;
+var interval = null;
+
+svg.on("mousedown", function(d) {
+    interval = setInterval(rotator,10);
+});
+
+svg.on("mouseup", function(d){
+    clearInterval(interval);
+})
+
+function rotator() {
+    curAngle += 1;
+    arcs.attr("transform", "translate(" + w / 2 + "," + h / 2 + ") rotate(" + curAngle + "," + 0 + "," + 0 + ")");
+
+
+
+  }
+
+
+  </script>
+
+
+</body>
+</html>

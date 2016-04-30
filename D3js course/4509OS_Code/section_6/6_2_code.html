@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="description" content="Drawing Shapes W/ D3 -"/>
+  <meta charset="utf-8">
+  <title>Basic Choropleth Map</title>
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <script src="http://d3js.org/topojson.v1.min.js"></script>
+  
+  <style type="text/css">
+  .color1{
+
+    color: "red";
+  }
+.color2{
+
+  background:blue;
+}
+  </style>
+  </head>
+  <body>
+  <script>
+    var width = 1200;
+    var height = 1000;
+    var Data;
+  
+
+        var path = d3.geo.path();
+         
+        
+
+
+//establish svg
+        var svg = d3.select("body").append("svg")
+          .attr("width", width)
+          .attr("height", height);
+
+var color = d3.scale.linear().domain([1,100])
+.range(['rgb(236,231,242)','rgb(166,189,219)','rgb(43,140,190)']);
+
+      d3.json("http:localhost/county.json", function(error, counties) {
+            if (error) return console.error(error);
+            console.log(counties);
+            Data = counties;
+
+           
+            //pair random numbers with each object
+               
+                //attach a random number to each json object with the key "chloropleth"
+        function randomizer(d){
+              //random number between 1-100
+                
+                for (var i=0; i<d.features.length; i++){
+                    var random = Math.floor(Math.random() * 100);
+                    d.features[i].properties.chloropleth = random;
+
+
+
+                }
+
+
+
+          };
+            randomizer(counties);
+           
+           
+
+     
+
+          svg.selectAll("path")
+          .data(counties.features)
+          .enter()
+          .append("path")
+          .attr("d", path)
+          /*.attr("fill", "#666666")*/
+          .attr("class", "counties")
+          .style("fill", function(d){
+            var chloropleth = d.properties.chloropleth;
+
+            if(chloropleth){
+                  return color(chloropleth);
+                  
+            }
+            else{
+              return "#666666"
+            }
+
+
+          });    
+
+   
+
+        });
+
+
+           
+
+     
+            //loop through and use .darken in the fill attribute
+    
+        
+              
+
+
+
+             /* svg.selectAll(".counties").on("mouseover", function(d,i){
+                    d3.select(this).attr("fill", "red");
+                   
+                    
+                  
+                     })
+
+
+              .on("mouseout", function(d,i){
+                  d3.select(this).transition().duration(500).attr("fill", "#666666");
+                    
+
+
+
+
+
+
+              });*/
+            
+
+
+
+
+
+
+
+  </script>
+  </body>
+  </html>

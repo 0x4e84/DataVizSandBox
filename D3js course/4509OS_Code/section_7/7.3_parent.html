@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="description" content="Drawing Shapes W/ D3 -"/>
+  <meta charset="utf-8">
+  <title>Using Pym.js</title>
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <script type="text/javascript" src="pym.js"></script>
+
+  <style>
+  body{
+    height:100%;
+    width:100%;
+  }
+  /* #container{
+    width:500px;
+    height:500px;
+  }*/
+  @media(max-width:500px){
+    #container{
+      width: 250px;
+      height:250px;
+    }
+  } 
+  </style>
+</head>
+<body>
+  
+  <div id="container">
+  </div>
+  
+  <script>
+    var pymParent = new pym.Parent('container', '7.3_child.html', {});
+  </script>
+</body>
+</html>
